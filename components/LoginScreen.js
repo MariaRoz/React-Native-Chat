@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Button } from 'react-native';
+import { StyleSheet, View, TextInput, Button, AsyncStorage } from 'react-native';
+import { loginUser } from "../service/authentication-api";
 
 export default class LoginScreen extends React.Component {
     constructor(props) {
@@ -10,6 +11,18 @@ export default class LoginScreen extends React.Component {
             password: '',
         }
     }
+    handleSubmit = () => {
+        loginUser(this.state.username, this.state.password).then((responseData) => {
+            console.log("RESULTS HERE:", responseData );
+            this.setState({
+                isLoading: false,
+                token: responseData.access_token
+            });
+            AsyncStorage.setItem('token', this.state.token);
+            this.props.navigation.navigate('Chat');
+        });
+    };
+
     render() {
         const {navigate} = this.props.navigation;
         return (
@@ -30,7 +43,7 @@ export default class LoginScreen extends React.Component {
                 <Button
                     title={'Login'}
                     color={'#ff4081'}
-                    onPress={ () => navigate('Chat')}
+                    onPress={ () => this.handleSubmit()}
                 />
                 <View style = {styles.message}>
                     <Button
