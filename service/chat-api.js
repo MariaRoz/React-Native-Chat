@@ -13,8 +13,8 @@ const getMessages = async() => {
         .then((response) => response.json())
         .catch((error) => {
             console.error(error);
-        })
+        });
 };
 
-export {getMessages}
+export { getMessages }
 

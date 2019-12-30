@@ -9,11 +9,10 @@ export default class LoginScreen extends React.Component {
         this.state = {
             username: '',
             password: '',
-        }
-    }
+        };
+    };
     handleSubmit = () => {
         loginUser(this.state.username, this.state.password).then((responseData) => {
-            console.log("RESULTS HERE:", responseData );
             this.setState({
                 isLoading: false,
                 token: responseData.access_token
@@ -54,8 +53,8 @@ export default class LoginScreen extends React.Component {
                 </View>
             </View>
         );
-    }
-}
+    };
+};
 
 const styles = StyleSheet.create({
     container: {

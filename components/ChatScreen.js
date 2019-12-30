@@ -7,27 +7,25 @@ export default class ChatScreen extends React.Component {
         super(props);
 
         this.state = {
-            data: [],
-        }
-    }
+            messages: [],
+        };
+    };
     componentDidMount() {
-        getMessages().then(res => {
-            this.setState({data: res})
-    })
-    }
+        getMessages().then(messagesInfo => {
+            this.setState({messages: messagesInfo});
+    });
+    };
 
     render() {
         const {navigation} = this.props;
         return (
             <View>
-                <View style={styles.header}>
-                    <Button onPress={ () => navigation.navigate('Register')} title='Register'/>
-                </View>
-                {this.state.data.map((res, i) => <Text key={i}>{res.message}</Text> )}
+                { this.state.messages.error === 'Unauthorized' ? <Button onPress={ () => navigation.navigate('Register')} title='Register'/>
+                : this.state.messages.map((data, i) => <Text key={i}>{data.message}</Text>)}
             </View>
         );
-    }
-}
+    };
+};
 
 const styles = StyleSheet.create({
     header: {
