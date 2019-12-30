@@ -5,10 +5,11 @@ import LoginScreen from "./components/LoginScreen";
 import ChatScreen from "./components/ChatScreen"
 import RegisterScreen from "./components/RegisterScreen";
 
+
 const AppNavigation = createStackNavigator({
-    Chat: ChatScreen,
-    Login: LoginScreen,
-    Register: RegisterScreen
+    Chat: { screen: ChatScreen, navigationOptions: { title: 'Chat', headerLeft: null }},
+    Login: { screen: LoginScreen, navigationOptions: { title: 'Login', headerLeft: null }} ,
+    Register: { screen: RegisterScreen, navigationOptions: { title: 'Register', headerLeft: null }},
 },
     {
         initialRouteName: 'Chat'
