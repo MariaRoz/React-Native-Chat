@@ -1,6 +1,6 @@
 const url = 'http://localhost:3000/auth/';
 
-const authUser = (username, password, page) => {
+const authentication = (username, password, page) => {
          return fetch(url+page, {
             method: 'POST',
             headers: {
@@ -16,6 +16,6 @@ const authUser = (username, password, page) => {
 };
 
 
-export { authUser }
+export { authentication }
 
 

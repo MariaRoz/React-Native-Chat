@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
-import { authUser } from "../service/authenticationApi";
+import { authentication } from "../service/authenticationApi";
 import {setToken } from "../service/asyncStorage";
 
 export default class RegisterScreen extends React.Component {
@@ -13,14 +13,18 @@ export default class RegisterScreen extends React.Component {
         };
     };
 
-    handleSubmit = () => {
-        authUser(this.state.username, this.state.password, 'register').then((responseData) => {
-            this.setState({
-                isLoading: false,
-                token: responseData.access_token
-            });
-            setToken(this.state.token).then(this.props.navigation.navigate('Chat'));
+    handleSubmit = async () => {
+        const responseData = await authentication(this.state.username, this.state.password, 'register');
+
+        this.setState({
+            isLoading: false,
+            token: responseData.access_token
         });
+
+        await setToken(this.state.token);
+
+        this.props.navigation.navigate('Chat')
+
     };
 
     render() {

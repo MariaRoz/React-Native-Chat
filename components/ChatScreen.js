@@ -6,11 +6,13 @@ import {clearAsyncStorage, getToken} from "../service/asyncStorage";
 export default class ChatScreen extends React.Component {
     constructor(props) {
         super(props);
-        getToken().then(userToken => this.props.navigation.navigate(userToken ? 'Chat' : 'Register'));
 
         this.state = {
             messages: [],
         };
+
+        this.AuthGuard();
+
     };
 
     componentDidMount() {
@@ -19,15 +21,22 @@ export default class ChatScreen extends React.Component {
     });
     };
 
-    logOut() {
-        clearAsyncStorage().then(this.props.navigation.navigate('Register'));
+    async AuthGuard () {
+        const userToken = await getToken();
+        this.props.navigation.navigate(userToken ? 'Chat' : 'Register')
+    }
+
+     async logOut() {
+        await clearAsyncStorage();
+        this.props.navigation.navigate('Register')
     };
 
     render() {
         const {navigation} = this.props;
+        const errorMessage= 'Unauthorized';
         return (
             <View>
-                { this.state.messages.error === 'Unauthorized' ?
+                { this.state.messages.error === errorMessage ?
                     (<View>
                         <Button onPress={() => navigation.navigate('Register')} title='Register'/>
                     </View>)
