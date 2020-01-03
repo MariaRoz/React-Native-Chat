@@ -10,20 +10,20 @@ export default class ChatScreen extends React.Component {
         this.state = {
             messages: [],
         };
-
-        this.AuthGuard();
-
     };
 
-    componentDidMount() {
-        getMessages().then(messagesInfo => {
+    async componentDidMount() {
+        const token = await this.AuthGuard();
+        if (token) {
+            const messagesInfo = await getMessages();
             this.setState({messages: messagesInfo});
-    });
+        }
     };
 
     async AuthGuard () {
         const userToken = await getToken();
-        this.props.navigation.navigate(userToken ? 'Chat' : 'Register')
+        this.props.navigation.navigate(userToken ? 'Chat' : 'Register');
+        return userToken;
     }
 
      async logOut() {
