@@ -1,5 +1,7 @@
 import React from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import { Button, StyleSheet, TextInput, View } from 'react-native';
+import { authentication } from "../service/authenticationApi";
+import {setToken } from "../service/asyncStorage";
 
 export default class RegisterScreen extends React.Component {
     constructor(props) {
@@ -8,8 +10,23 @@ export default class RegisterScreen extends React.Component {
         this.state = {
             username: '',
             password: '',
-        }
-    }
+        };
+    };
+
+    handleSubmit = async () => {
+        const responseData = await authentication(this.state.username, this.state.password, 'register');
+
+        this.setState({
+            isLoading: false,
+            token: responseData.access_token
+        });
+
+        await setToken(this.state.token);
+
+        this.props.navigation.navigate('Chat')
+
+    };
+
     render() {
         const {navigate} = this.props.navigation;
         return (
@@ -30,7 +47,7 @@ export default class RegisterScreen extends React.Component {
                 <Button
                     title={'Register'}
                     color={'#ff4081'}
-                    onPress={ () => navigate('Chat')}
+                    onPress={ () => this.handleSubmit()}
                 />
                 <View style = {styles.message}>
                     <Button
@@ -39,11 +56,10 @@ export default class RegisterScreen extends React.Component {
                         onPress={ () => navigate('Login')}
                     />
                 </View>
-
             </View>
         );
-    }
-}
+    };
+};
 
 const styles = StyleSheet.create({
     container: {
